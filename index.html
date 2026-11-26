@@ -114,32 +114,38 @@
     bottom: 0;
     z-index: 1;
   }
-  .wordmark-section img {
+  .wordmark-stack {
+    position: relative;
+    width: 100%;
+  }
+  .wordmark-stack img {
     display: block;
     width: 100%;
     height: auto;
   }
-  .wordmark-section .mobile-wordmark { display: none; }
+  .wordmark-stack .mobile-wordmark { display: none; }
   @media (max-width: 767px) {
-    .wordmark-section .desktop-wordmark { display: none; }
-    .wordmark-section .mobile-wordmark { display: block; }
+    .wordmark-stack .desktop-wordmark { display: none; }
+    .wordmark-stack .mobile-wordmark { display: block; }
   }
 
-  /* progressive-glass blur overlay, matching Figma's own
-     background-blur export (backdrop-filter: blur(17px)) */
-  .blur-overlay {
-    position: absolute;
-    left: 0;
-    width: 100%;
-    bottom: 0;
-    height: 93.4%;
-    background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(17px);
-    -webkit-backdrop-filter: blur(17px);
-    pointer-events: none;
+  /* progressive blur: a second, blurred copy of the wordmark is
+     stacked on top of the sharp one and masked with a vertical
+     gradient, so the top stays crisp and the blur fades in toward
+     the bottom — this is what Figma's "PROGRESSIVE" background
+     blur actually looks like (its own SVG export flattens it to a
+     uniform backdrop-filter, which blurs the whole thing) */
+  .wordmark-stack .sharp {
+    position: relative;
   }
-  @media (max-width: 767px) {
-    .blur-overlay { height: 91.2%; }
+  .wordmark-stack .blurred {
+    position: absolute;
+    top: 0;
+    left: 0;
+    filter: blur(1.15vw);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 32%, rgba(0,0,0,0.55) 58%, #000 88%);
+    mask-image: linear-gradient(to bottom, transparent 0%, transparent 32%, rgba(0,0,0,0.55) 58%, #000 88%);
+    pointer-events: none;
   }
 </style>
 </head>
@@ -160,9 +166,12 @@
     </div>
 
     <div class="wordmark-section">
-      <img class="desktop-wordmark" src="wordmark-desktop.svg" alt="Michael Abraham — JKT, IDN">
-      <img class="mobile-wordmark" src="wordmark-mobile.svg" alt="Michael Abraham — JKT, IDN">
-      <div class="blur-overlay" aria-hidden="true"></div>
+      <div class="wordmark-stack">
+        <img class="desktop-wordmark sharp" src="wordmark-desktop.svg" alt="Michael Abraham — JKT, IDN">
+        <img class="desktop-wordmark blurred" src="wordmark-desktop.svg" alt="" aria-hidden="true">
+        <img class="mobile-wordmark sharp" src="wordmark-mobile.svg" alt="Michael Abraham — JKT, IDN">
+        <img class="mobile-wordmark blurred" src="wordmark-mobile.svg" alt="" aria-hidden="true">
+      </div>
     </div>
   </main>
 </body>
