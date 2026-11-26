@@ -11,8 +11,8 @@
 <style>
   :root {
     --fg: #141414;
-    --muted: #8a8a8a;
-    --line: rgba(218, 218, 218, 0.9);
+    --muted: #898989;
+    --line: #dadada;
   }
   * { box-sizing: border-box; }
   html, body {
@@ -27,48 +27,73 @@
   .hero {
     position: relative;
     min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
+    width: 100%;
     overflow: hidden;
   }
 
-  /* faint vertical grid, fading in from the top */
+  /* faint vertical grid lines: opaque near the top, fading to
+     invisible by ~60% down, matching the Figma export */
   .grid-lines {
     position: absolute;
-    inset: 0;
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 76.2%;
     pointer-events: none;
     z-index: 0;
   }
   .grid-lines span {
-    border-left: 1px solid transparent;
-    background: linear-gradient(to bottom, transparent 0%, var(--line) 55%, var(--line) 100%) left / 1px 100% no-repeat;
+    position: absolute;
+    top: 0;
+    width: 1px;
+    height: 100%;
+    background: linear-gradient(to bottom, var(--line) 0%, var(--line) 60%, transparent 79%);
   }
-  .grid-lines span:last-child { border-right: none; }
+  .grid-lines span:nth-child(1) { left: 2.8%; }
+  .grid-lines span:nth-child(2) { left: 26.82%; }
+  .grid-lines span:nth-child(3) { left: 50.85%; }
+  .grid-lines span:nth-child(4) { left: 74.88%; }
+  .grid-lines span:nth-child(5) { left: 97.26%; }
+  @media (max-width: 767px) {
+    .grid-lines { height: 92.3%; }
+    .grid-lines span:nth-child(1) { left: 10.32%; }
+    .grid-lines span:nth-child(2) { left: 31.86%; }
+    .grid-lines span:nth-child(3) { left: 53.15%; }
+    .grid-lines span:nth-child(4) { left: 74.69%; }
+    .grid-lines span:nth-child(5) { left: 89.88%; }
+  }
 
   .intro {
-    position: relative;
+    position: absolute;
     z-index: 1;
+    left: 26.8%;
+    top: 43.75%;
+    width: 48.1%;
+    max-width: 700px;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
     gap: 20px;
-    padding: 48px clamp(24px, 6vw, 60px) 0;
-    margin-top: clamp(80px, 22vh, 320px);
-    max-width: 700px;
+  }
+  @media (max-width: 767px) {
+    .intro {
+      left: 10.26%;
+      top: 35.6%;
+      width: 79.5%;
+      max-width: none;
+    }
   }
 
   .avatar {
     width: 54px;
     height: 54px;
     border-radius: 50%;
+    display: block;
   }
 
   .intro p {
     margin: 0;
-    font-size: clamp(18px, 2.4vw, 24px);
+    font-size: clamp(16px, 1.65vw, 24px);
     line-height: 1.2;
     font-weight: 400;
   }
@@ -81,71 +106,40 @@
   }
   .intro a:hover { color: #000; }
 
+  /* wordmark: exact vector artwork exported from Figma, bottom-anchored */
   .wordmark-section {
-    position: relative;
-    z-index: 1;
-    padding: 0 clamp(16px, 4vw, 40px) clamp(16px, 3vh, 40px);
-    margin-top: clamp(48px, 10vh, 140px);
-  }
-
-  .labels {
-    display: flex;
-    justify-content: space-between;
-    font-size: 13px;
-    letter-spacing: 0.04em;
-    color: var(--muted);
-    padding: 0 4px 6px;
-  }
-
-  .wordmark-stack {
-    position: relative;
-    line-height: 1;
-  }
-
-  .wordmark {
-    margin: 0;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    width: 100%;
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    font-size: clamp(56px, 11vw, 160px);
-    white-space: nowrap;
-  }
-
-  .wordmark.sharp {
-    color: var(--fg);
-    position: relative;
-    z-index: 1;
-  }
-
-  /* progressive blur overlay: a blurred duplicate of the wordmark,
-     faded in with a gradient mask so the blur intensifies toward the bottom */
-  .wordmark.blurred {
     position: absolute;
-    inset: 0;
-    z-index: 2;
-    color: var(--fg);
-    filter: blur(10px);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 15%, black 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, transparent 15%, black 100%);
-    user-select: none;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1;
+  }
+  .wordmark-section img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .wordmark-section .mobile-wordmark { display: none; }
+  @media (max-width: 767px) {
+    .wordmark-section .desktop-wordmark { display: none; }
+    .wordmark-section .mobile-wordmark { display: block; }
+  }
+
+  /* progressive-glass blur overlay, matching Figma's own
+     background-blur export (backdrop-filter: blur(17px)) */
+  .blur-overlay {
+    position: absolute;
+    left: 0;
+    width: 100%;
+    bottom: 0;
+    height: 93.4%;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(17px);
+    -webkit-backdrop-filter: blur(17px);
     pointer-events: none;
   }
-
-  @media (max-width: 760px) {
-    .intro {
-      margin-top: clamp(220px, 46vh, 420px);
-      padding-top: 24px;
-    }
-    .wordmark-section {
-      margin-top: 64px;
-    }
-    .wordmark {
-      justify-content: flex-start;
-      gap: 0.25em;
-    }
+  @media (max-width: 767px) {
+    .blur-overlay { height: 91.2%; }
   }
 </style>
 </head>
@@ -166,18 +160,9 @@
     </div>
 
     <div class="wordmark-section">
-      <div class="labels">
-        <span>JKT</span>
-        <span>IDN</span>
-      </div>
-      <div class="wordmark-stack">
-        <h1 class="wordmark sharp">
-          <span>MICHAEL</span><span>ABRAHAM</span>
-        </h1>
-        <h1 class="wordmark blurred" aria-hidden="true">
-          <span>MICHAEL</span><span>ABRAHAM</span>
-        </h1>
-      </div>
+      <img class="desktop-wordmark" src="wordmark-desktop.svg" alt="Michael Abraham — JKT, IDN">
+      <img class="mobile-wordmark" src="wordmark-mobile.svg" alt="Michael Abraham — JKT, IDN">
+      <div class="blur-overlay" aria-hidden="true"></div>
     </div>
   </main>
 </body>
