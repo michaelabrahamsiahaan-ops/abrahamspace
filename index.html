@@ -131,10 +131,14 @@
 
   /* progressive blur: a second, blurred copy of the wordmark is
      stacked on top of the sharp one and masked with a vertical
-     gradient, so the top stays crisp and the blur fades in toward
-     the bottom — this is what Figma's "PROGRESSIVE" background
-     blur actually looks like (its own SVG export flattens it to a
-     uniform backdrop-filter, which blurs the whole thing) */
+     gradient, so the top half of each letter stays crisp and the
+     bottom half melts into blur — matching the reference render.
+     Note: unprefixed mask-image is luminance-based (white = shown,
+     black = hidden), so the gradient must ramp toward white, not
+     black, or the masked layer silently disappears. The stops below
+     are tuned to the letters' own position inside the viewBox
+     (roughly 13%-54% of the wordmark image's height), not the full
+     image height (which also includes the JKT/IDN label strip). */
   .wordmark-stack .sharp {
     position: relative;
   }
@@ -142,9 +146,9 @@
     position: absolute;
     top: 0;
     left: 0;
-    filter: blur(1.15vw);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 32%, rgba(0,0,0,0.55) 58%, #000 88%);
-    mask-image: linear-gradient(to bottom, transparent 0%, transparent 32%, rgba(0,0,0,0.55) 58%, #000 88%);
+    filter: blur(1.3vw);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 22%, rgba(255,255,255,0.5) 38%, #fff 55%, #fff 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, transparent 22%, rgba(255,255,255,0.5) 38%, #fff 55%, #fff 100%);
     pointer-events: none;
   }
 </style>
