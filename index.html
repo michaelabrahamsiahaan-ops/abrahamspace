@@ -129,26 +129,31 @@
     .wordmark-stack .mobile-wordmark { display: block; }
   }
 
-  /* progressive blur: a second, blurred copy of the wordmark is
-     stacked on top of the sharp one and masked with a vertical
-     gradient, so the top half of each letter stays crisp and the
-     bottom half melts into blur — matching the reference render.
+  /* progressive blur: a frosted-glass overlay sits over the sharp
+     wordmark and is masked with a vertical gradient, so the top of
+     each letter stays crisp and the bottom melts into a soft haze.
+     This mirrors what Figma's own "PROGRESSIVE" background blur
+     actually renders as (its SVG export just flattens it to a plain
+     backdrop-filter): a light, mostly-transparent white tint with
+     backdrop-filter blur, not a duplicated/blurred copy of the
+     glyphs — stacking a literally-blurred copy of bold letterforms
+     barely changes their solid interior (only the edges soften), so
+     it reads as a faint shadow rather than a haze. Blurring the real
+     backdrop through a masked glass layer is what actually washes
+     the lower half of the letters out, matching the reference PNG.
      Note: unprefixed mask-image is luminance-based (white = shown,
-     black = hidden), so the gradient must ramp toward white, not
-     black, or the masked layer silently disappears. The stops below
-     are tuned to the letters' own position inside the viewBox
-     (roughly 13%-54% of the wordmark image's height), not the full
-     image height (which also includes the JKT/IDN label strip). */
-  .wordmark-stack .sharp {
-    position: relative;
-  }
-  .wordmark-stack .blurred {
+     black = hidden), so the gradient must ramp toward white. */
+  .wordmark-glass {
     position: absolute;
     top: 0;
     left: 0;
-    filter: blur(2vw);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 13%, #fff 54%, #fff 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, transparent 13%, #fff 54%, #fff 100%);
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.12);
+    backdrop-filter: blur(13px);
+    -webkit-backdrop-filter: blur(13px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 20%, rgba(255,255,255,0.6) 45%, #fff 70%, #fff 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, transparent 20%, rgba(255,255,255,0.6) 45%, #fff 70%, #fff 100%);
     pointer-events: none;
   }
 </style>
@@ -171,10 +176,9 @@
 
     <div class="wordmark-section">
       <div class="wordmark-stack">
-        <img class="desktop-wordmark sharp" src="wordmark-desktop.svg" alt="Michael Abraham — JKT, IDN">
-        <img class="desktop-wordmark blurred" src="wordmark-desktop.svg" alt="" aria-hidden="true">
-        <img class="mobile-wordmark sharp" src="wordmark-mobile.svg" alt="Michael Abraham — JKT, IDN">
-        <img class="mobile-wordmark blurred" src="wordmark-mobile.svg" alt="" aria-hidden="true">
+        <img class="desktop-wordmark" src="wordmark-desktop.svg" alt="Michael Abraham — JKT, IDN">
+        <img class="mobile-wordmark" src="wordmark-mobile.svg" alt="Michael Abraham — JKT, IDN">
+        <div class="wordmark-glass" aria-hidden="true"></div>
       </div>
     </div>
   </main>
