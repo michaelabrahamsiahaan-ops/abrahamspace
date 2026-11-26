@@ -129,31 +129,28 @@
     .wordmark-stack .mobile-wordmark { display: block; }
   }
 
-  /* progressive blur: a frosted-glass overlay sits over the sharp
-     wordmark and is masked with a vertical gradient, so the top of
-     each letter stays crisp and the bottom melts into a soft haze.
-     This mirrors what Figma's own "PROGRESSIVE" background blur
-     actually renders as (its SVG export just flattens it to a plain
-     backdrop-filter): a light, mostly-transparent white tint with
-     backdrop-filter blur, not a duplicated/blurred copy of the
-     glyphs — stacking a literally-blurred copy of bold letterforms
-     barely changes their solid interior (only the edges soften), so
-     it reads as a faint shadow rather than a haze. Blurring the real
-     backdrop through a masked glass layer is what actually washes
-     the lower half of the letters out, matching the reference PNG.
+  /* Progressive background blur, based on Figma's own node data for
+     "Rectangle 7" (fetched via the REST API): a white fill at
+     opacity 0.02 (negligible tint by itself — it exists only to
+     receive the blur) with a BACKGROUND_BLUR effect of blurType
+     PROGRESSIVE, radius 0 -> 34 starting ~15% down this wordmark box
+     and reaching full strength by the bottom. CSS has no
+     continuously-variable backdrop-filter radius, so this is
+     approximated with a single moderate blur revealed through a
+     gradient mask — verified by live-patching the deployed page
+     before committing (a multi-layer banded version was tried first
+     but double-applying backdrop-filter in the overlapping bands
+     compounded into far too strong a blur).
      Note: unprefixed mask-image is luminance-based (white = shown,
-     black = hidden), so the gradient must ramp toward white. */
+     black = hidden), so the gradient ramps toward white. */
   .wordmark-glass {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(255, 255, 255, 0.12);
+    inset: 0;
+    background: rgba(255, 255, 255, 0.02);
     backdrop-filter: blur(13px);
     -webkit-backdrop-filter: blur(13px);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 20%, rgba(255,255,255,0.6) 45%, #fff 70%, #fff 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, transparent 20%, rgba(255,255,255,0.6) 45%, #fff 70%, #fff 100%);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 15%, rgba(255,255,255,0.5) 45%, #fff 75%, #fff 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, transparent 15%, rgba(255,255,255,0.5) 45%, #fff 75%, #fff 100%);
     pointer-events: none;
   }
 </style>
