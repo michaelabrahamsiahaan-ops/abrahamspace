@@ -106,7 +106,7 @@
   }
   .intro a:hover { color: #000; }
 
-  /* wordmark: exact vector artwork exported from Figma, bottom-anchored */
+  /* wordmark: Figma's own render of the wordmark band (incl. Rectangle 7's progressive blur, radius 0->34, which CSS cannot reproduce exactly), exported at 2x/3x via the REST API */
   .wordmark-section {
     position: absolute;
     left: 0;
@@ -129,30 +129,6 @@
     .wordmark-stack .mobile-wordmark { display: block; }
   }
 
-  /* Progressive background blur, based on Figma's own node data for
-     "Rectangle 7" (fetched via the REST API): a white fill at
-     opacity 0.02 (negligible tint by itself — it exists only to
-     receive the blur) with a BACKGROUND_BLUR effect of blurType
-     PROGRESSIVE, radius 0 -> 34 starting ~15% down this wordmark box
-     and reaching full strength by the bottom. CSS has no
-     continuously-variable backdrop-filter radius, so this is
-     approximated with a single moderate blur revealed through a
-     gradient mask — verified by live-patching the deployed page
-     before committing (a multi-layer banded version was tried first
-     but double-applying backdrop-filter in the overlapping bands
-     compounded into far too strong a blur).
-     Note: unprefixed mask-image is luminance-based (white = shown,
-     black = hidden), so the gradient ramps toward white. */
-  .wordmark-glass {
-    position: absolute;
-    inset: 0;
-    background: rgba(255, 255, 255, 0.02);
-    backdrop-filter: blur(13px);
-    -webkit-backdrop-filter: blur(13px);
-    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 15%, rgba(255,255,255,0.5) 45%, #fff 75%, #fff 100%);
-    mask-image: linear-gradient(to bottom, transparent 0%, transparent 15%, rgba(255,255,255,0.5) 45%, #fff 75%, #fff 100%);
-    pointer-events: none;
-  }
 </style>
 </head>
 <body>
@@ -173,10 +149,9 @@
 
     <div class="wordmark-section">
       <div class="wordmark-stack">
-        <img class="desktop-wordmark" src="wordmark-desktop.svg" alt="Michael Abraham — JKT, IDN">
-        <img class="mobile-wordmark" src="wordmark-mobile.svg" alt="Michael Abraham — JKT, IDN">
-        <div class="wordmark-glass" aria-hidden="true"></div>
-      </div>
+        <img class="desktop-wordmark" src="wordmark-desktop.webp" width="2880" height="518" alt="Michael Abraham — JKT, IDN">
+        <img class="mobile-wordmark" src="wordmark-mobile.webp" width="1170" height="325" alt="Michael Abraham — JKT, IDN">
+              </div>
     </div>
   </main>
 </body>
