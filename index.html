@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Michael Abraham</title>
+<meta name="description" content="Michael Abraham — Product Designer based in Indonesia. New portfolio in progress.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Google+Sans+Flex:wght@100..900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fg: #141414;
+    --muted: #8a8a8a;
+    --line: rgba(218, 218, 218, 0.9);
+  }
+  * { box-sizing: border-box; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #ffffff;
+    color: var(--fg);
+    font-family: "Google Sans Flex", -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Helvetica, Arial, sans-serif;
+    overflow-x: hidden;
+  }
+
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    overflow: hidden;
+  }
+
+  /* faint vertical grid, fading in from the top */
+  .grid-lines {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    pointer-events: none;
+    z-index: 0;
+  }
+  .grid-lines span {
+    border-left: 1px solid transparent;
+    background: linear-gradient(to bottom, transparent 0%, var(--line) 55%, var(--line) 100%) left / 1px 100% no-repeat;
+  }
+  .grid-lines span:last-child { border-right: none; }
+
+  .intro {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 48px clamp(24px, 6vw, 60px) 0;
+    margin-top: clamp(80px, 22vh, 320px);
+    max-width: 700px;
+  }
+
+  .avatar {
+    width: 54px;
+    height: 54px;
+    border-radius: 50%;
+  }
+
+  .intro p {
+    margin: 0;
+    font-size: clamp(18px, 2.4vw, 24px);
+    line-height: 1.2;
+    font-weight: 400;
+  }
+  .muted { color: var(--muted); }
+  .dark { color: var(--fg); }
+  .intro a {
+    color: var(--fg);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+  .intro a:hover { color: #000; }
+
+  .wordmark-section {
+    position: relative;
+    z-index: 1;
+    padding: 0 clamp(16px, 4vw, 40px) clamp(16px, 3vh, 40px);
+    margin-top: clamp(48px, 10vh, 140px);
+  }
+
+  .labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 13px;
+    letter-spacing: 0.04em;
+    color: var(--muted);
+    padding: 0 4px 6px;
+  }
+
+  .wordmark-stack {
+    position: relative;
+    line-height: 1;
+  }
+
+  .wordmark {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    width: 100%;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    font-size: clamp(56px, 11vw, 160px);
+    white-space: nowrap;
+  }
+
+  .wordmark.sharp {
+    color: var(--fg);
+    position: relative;
+    z-index: 1;
+  }
+
+  /* progressive blur overlay: a blurred duplicate of the wordmark,
+     faded in with a gradient mask so the blur intensifies toward the bottom */
+  .wordmark.blurred {
+    position: absolute;
+    inset: 0;
+    z-index: 2;
+    color: var(--fg);
+    filter: blur(10px);
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, transparent 15%, black 100%);
+    mask-image: linear-gradient(to bottom, transparent 0%, transparent 15%, black 100%);
+    user-select: none;
+    pointer-events: none;
+  }
+
+  @media (max-width: 760px) {
+    .intro {
+      margin-top: clamp(220px, 46vh, 420px);
+      padding-top: 24px;
+    }
+    .wordmark-section {
+      margin-top: 64px;
+    }
+    .wordmark {
+      justify-content: flex-start;
+      gap: 0.25em;
+    }
+  }
+</style>
+</head>
+<body>
+  <main class="hero">
+    <div class="grid-lines" aria-hidden="true">
+      <span></span><span></span><span></span><span></span><span></span>
+    </div>
+
+    <div class="intro">
+      <img class="avatar" src="avatar.svg" alt="Michael Abraham" width="54" height="54">
+      <p>
+        <span class="muted">Michael Abraham is Product Designer based in Indonesia.</span><br>
+        <span class="dark">New portfolio still in progress.</span>
+        <span class="muted">You can</span>
+        <a href="https://abraham-space.framer.website/" rel="noopener">check Portfolio 2026 here</a>
+      </p>
+    </div>
+
+    <div class="wordmark-section">
+      <div class="labels">
+        <span>JKT</span>
+        <span>IDN</span>
+      </div>
+      <div class="wordmark-stack">
+        <h1 class="wordmark sharp">
+          <span>MICHAEL</span><span>ABRAHAM</span>
+        </h1>
+        <h1 class="wordmark blurred" aria-hidden="true">
+          <span>MICHAEL</span><span>ABRAHAM</span>
+        </h1>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
